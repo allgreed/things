@@ -11,17 +11,23 @@ module cold_shoe_insert() {
 }
 
 
-// TODO: centered or not (compensate via translate)
+module tentacle_sync_e_velcro_mount(table_height, table_margin) {
+    // per official website
+    tentacle_width = 38;
+    tentacle_length = 50;
+    
+    translate([0,0, table_height / 2])
+    cube([tentacle_width + table_margin, tentacle_length + table_margin, table_height], center = true);
+    // TODO: little 1.5mm dip / shelf for placing velcro
+    // TODO: round corners on the tentacle table
+}
+
+
+
 cold_shoe_insert();
 
-
-// TODO: experiment with 2mm height
-table_height = 3;
-// TODO: is margin =5mm ok?
-table_margin = 5;
-// TODO: little 1.5mm dip / shelf for placing velcro
-// TODO: round corners on the tentacle table
-
-translate([0,0,(2 / 2) + 1.5 + (table_height / 2)]) {
-  cube([38 + table_margin, 50 + table_margin, table_height], center = true);
+translate([0,0,(2 / 2) + 1.5]) {
+    // TODO: is margin =5mm ok?
+    // TODO: experiment with 2mm height
+    tentacle_sync_e_velcro_mount(table_height=3, table_margin=5);
 }
