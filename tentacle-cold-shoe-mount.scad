@@ -11,25 +11,32 @@ module cold_shoe_insert() {
 }
 
 
-// TODO: round, cool corners
-module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_margin, velcro_dip) {
+module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_margin, velcro_dip, minkowski_cylinder_r) {
+    // minkowski_cylinder_r is up to 21 for whatever reason, then it degrades into a full circle
+
     // per official website
     tentacle_width = 38;
     tentacle_length = 50;
     
     // self-measured
-    // TODO: ask for official dimensions
     velcro_pad_width = 22;
     velcro_pad_length = 33;
     
-    translate([0,0, table_height / 2])
-    difference() {
-    cube([tentacle_width + table_margin, tentacle_length + table_margin, table_height], center = true);
-        
-    color([1,0,0])
-    translate([0,0,table_height / 2])
-    // the 2x compsensates for centering and it's easier to wrok with that way
-    cube([velcro_pad_width + velcro_pad_margin, velcro_pad_length + velcro_pad_margin, 2 * velcro_dip], center = true);
+    translate([0,0, table_height / 2]) {
+        difference() {
+            $fn=50;
+            minkowski() {
+                cube([tentacle_width + table_margin - 2 * minkowski_cylinder_r, tentacle_length + table_margin - 2 * minkowski_cylinder_r, table_height / 2], center = true);
+                
+                color([0,1,0])
+                cylinder(r=minkowski_cylinder_r,h=table_height / 2, center = true);
+            }
+            
+            color([1,0,0])
+            translate([0,0,table_height / 2])
+            // the 2x compsensates for centering and it's easier to wrok with that way
+            cube([velcro_pad_width + velcro_pad_margin, velcro_pad_length + velcro_pad_margin, 2 * velcro_dip], center = true);
+        }
     }
 }
 
@@ -41,10 +48,15 @@ cold_shoe_over_0_height = (2 / 2) + 1.5;
 translate([0,0,cold_shoe_over_0_height]) {
     // prototype 2
     // TODO: PARAMETER_EXPERIMENT is margin =5 ok?
+
+    // prototype 3
     // TODO: PARAMETER_EXPERIMENT 2mm height
-    
+    // TODO: PARAMETER_EXPERIMENT is minkowski_cylinder_r=7 fine?
     // TODO: PARAMETER_EXPERIMENT is velcro_dip=0.5 ok?
     // TODO: PARAMETER_EXPERIMENT is velcro_pad_margin=8 ok?
+
+    // prototype 4
+
     // official pads are ~7mm bigger than the inbuild pads
-    tentacle_sync_e_velcro_mount(table_height=3, table_margin=5, velcro_pad_margin=8, velcro_dip=0.5);
+    tentacle_sync_e_velcro_mount(table_height=3, table_margin=5, velcro_pad_margin=8, velcro_dip=0.5, minkowski_cylinder_r=7);
 }
