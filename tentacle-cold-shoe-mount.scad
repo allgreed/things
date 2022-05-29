@@ -48,15 +48,18 @@ cold_shoe_over_0_height = (2 / 2) + 1.5;
 translate([0,0,cold_shoe_over_0_height]) {
     // prototype 2
     // TODO: PARAMETER_EXPERIMENT is margin =5 ok?
+    // label as gen 2 mark 2
 
     // prototype 3
     // TODO: PARAMETER_EXPERIMENT 2mm height
     // TODO: PARAMETER_EXPERIMENT is minkowski_cylinder_r=7 fine?
     // TODO: PARAMETER_EXPERIMENT is velcro_dip=0.5 ok?
     // TODO: PARAMETER_EXPERIMENT is velcro_pad_margin=8 ok?
+    // label as gen 2 mark 3
 
     // prototype 4
-
+    // label as gen 2 mark 4 [if necessary]
+ 
     // official pads are ~7mm bigger than the inbuild pads
     tentacle_sync_e_velcro_mount(table_height=3, table_margin=5, velcro_pad_margin=8, velcro_dip=0.5, minkowski_cylinder_r=7);
 }
