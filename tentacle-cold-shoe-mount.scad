@@ -12,6 +12,7 @@ module cold_shoe_insert() {
 
 
 module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_margin, velcro_dip, minkowski_cylinder_r) {
+    // TOOD: can I guard against it?
     // minkowski_cylinder_r is up to 21 for whatever reason, then it degrades into a full circle
 
     // per official website
@@ -21,12 +22,23 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_margi
     // self-measured
     velcro_pad_width = 22;
     velcro_pad_length = 33;
+    locking_connector_dip = 5;
+    
+    // TODO: this cannot be really parametrized yet
+    locking_connector_dip_margin = 2;
     
     translate([0,0, table_height / 2]) {
         difference() {
             $fn=50;
             minkowski() {
-                cube([tentacle_width + table_margin - 2 * minkowski_cylinder_r, tentacle_length + table_margin - 2 * minkowski_cylinder_r, table_height / 2], center = true);
+                difference() {
+                    cube([tentacle_width + table_margin - 2 * minkowski_cylinder_r, tentacle_length + table_margin - 2 * minkowski_cylinder_r, table_height / 2], center = true);
+                    
+                    // TODO: figure out why there has to be this shitty -1 and the y axis
+                    color([0,1,0])
+                    translate([0,(tentacle_width + table_margin - 2 * minkowski_cylinder_r) / 2 + (locking_connector_dip + locking_connector_dip_margin) / 2 - 1 ,0])
+                    cube([tentacle_width + table_margin - 2 * minkowski_cylinder_r, locking_connector_dip + locking_connector_dip_margin, table_height / 2], center=true);
+                }
                 
                 color([0,1,0])
                 cylinder(r=minkowski_cylinder_r,h=table_height / 2, center = true);
@@ -46,19 +58,21 @@ cold_shoe_insert();
 cold_shoe_over_0_height = (2 / 2) + 1.5;
 
 translate([0,0,cold_shoe_over_0_height]) {
-    // prototype 2
+    // prototype 1
     // TODO: PARAMETER_EXPERIMENT is margin =5 ok?
-    // label as gen 2 mark 2
-
-    // prototype 3
-    // TODO: PARAMETER_EXPERIMENT 2mm height
     // TODO: PARAMETER_EXPERIMENT is minkowski_cylinder_r=7 fine?
     // TODO: PARAMETER_EXPERIMENT is velcro_dip=0.5 ok?
     // TODO: PARAMETER_EXPERIMENT is velcro_pad_margin=8 ok?
-    // label as gen 2 mark 3
+    // TODO: PARAMETER EXPERIMENT is locking_connector_dip_margin ok?
+    // label as gen 2 mark 1
 
-    // prototype 4
-    // label as gen 2 mark 4 [if necessary]
+    // prototype 2
+    // TODO: PARAMETER_EXPERIMENT 2mm height
+    // TODO: fix issues
+    // label as gen 2 mark 2
+
+    // prototype 3
+    // label as gen 2 mark 3 [if necessary]
  
     // official pads are ~7mm bigger than the inbuild pads
     tentacle_sync_e_velcro_mount(table_height=3, table_margin=5, velcro_pad_margin=8, velcro_dip=0.5, minkowski_cylinder_r=7);
