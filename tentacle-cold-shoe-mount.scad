@@ -19,9 +19,11 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_margi
     tentacle_width = 38;
     tentacle_length = 50;
     
-    // self-measured
-    velcro_pad_width = 22;
-    velcro_pad_length = 33;
+    // as stated by Tentcle support staff when asked on May 28, 2022
+    inbuilt_velcro_pad_width = 20;
+    inbuilt_velcro_pad_length = 29.5;
+
+    // self-measured, but I've already asked Tentacle
     locking_connector_dip = 5;
     
     // TODO: this cannot be really parametrized yet
@@ -47,7 +49,7 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_margi
             color([1,0,0])
             translate([0,0,table_height / 2])
             // the 2x compsensates for centering and it's easier to wrok with that way
-            cube([velcro_pad_width + velcro_pad_margin, velcro_pad_length + velcro_pad_margin, 2 * velcro_dip], center = true);
+            cube([inbuilt_velcro_pad_width + velcro_pad_margin, inbuilt_velcro_pad_length + velcro_pad_margin, 2 * velcro_dip], center = true);
         }
     }
 }
