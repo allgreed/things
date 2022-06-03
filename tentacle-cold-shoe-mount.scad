@@ -62,14 +62,17 @@ cold_shoe_over_0_height = (2 / 2) + 1.5;
 translate([0,0,cold_shoe_over_0_height]) {
     // prototype 2
     // TODO: 45deg chamfer on the velcro dip (outside of dip!)
+    // TODO: add chamfered support on the "shorter" (then one it's being printed on) side for part of the cold shoe insert
     
     // PARAMETER_EXPERIMENT 3mm table margin, 5 is cool but let's see
+    // PARAMETER_EXPERIMENT 2mm table height, 2 is cool but let's see
     // PARAMETER_EXPERIMENT 1mm velcro dip, 0.5 is cool but let's see
     // label as gen 2 mark 2
 
     // prototype 3
-    // TODO: add 2 x 45deg chamfered rubber band rails [compensate the shoe insert height by rubber band margin (it'll be likely sticking out) OR just make the rails deep enough, so it doesn't]
+    // TODO: add 2 x 45deg chamfered rubber band rails [compensate the shoe insert height by rubber band margin, yes, compensate]
+    // TODO: this needs 3.5mm table height to even make sense - rubber is 1.5mm
     // label as gen 2 mark 3
  
-    tentacle_sync_e_velcro_mount(table_height=3, table_margin=3, velcro_pad_width_margin=8, velcro_pad_length_margin=9, velcro_dip=1, minkowski_cylinder_r=7);
+    tentacle_sync_e_velcro_mount(table_height=3, table_margin=2, velcro_pad_width_margin=8, velcro_pad_length_margin=9, velcro_dip=1, minkowski_cylinder_r=7);
 }
