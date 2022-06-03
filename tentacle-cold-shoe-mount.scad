@@ -11,7 +11,7 @@ module cold_shoe_insert() {
 }
 
 
-module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_margin, velcro_dip, minkowski_cylinder_r) {
+module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_length_margin, velcro_dip, minkowski_cylinder_r, velcro_pad_width_margin) {
     // TOOD: can I guard against it?
     // minkowski_cylinder_r is up to 21 for whatever reason, then it degrades into a full circle
 
@@ -49,7 +49,7 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_margi
             color([1,0,0])
             translate([0,0,table_height / 2])
             // the 2x compsensates for centering and it's easier to wrok with that way
-            cube([inbuilt_velcro_pad_width + velcro_pad_margin, inbuilt_velcro_pad_length + velcro_pad_margin, 2 * velcro_dip], center = true);
+            cube([inbuilt_velcro_pad_width + velcro_pad_length_margin, inbuilt_velcro_pad_length + velcro_pad_width_margin, 2 * velcro_dip], center = true);
         }
     }
 }
@@ -61,16 +61,15 @@ cold_shoe_over_0_height = (2 / 2) + 1.5;
 
 translate([0,0,cold_shoe_over_0_height]) {
     // prototype 2
-    // TODO: 45deg chaufer on the velcro dip
-    // TODO: velcro pad is too wide and too short (verify and measure with gen2mk1)
+    // TODO: 45deg chamfer on the velcro dip (outside of dip!)
     
-    // PARAMETER_EXPERIMENT 2mm height, 3 is cool but let's see
-    // PARAMETER_EXPERIMENT 0mm table margin, 5 is cool but let's see
+    // PARAMETER_EXPERIMENT 3mm table margin, 5 is cool but let's see
+    // PARAMETER_EXPERIMENT 1mm velcro dip, 0.5 is cool but let's see
     // label as gen 2 mark 2
 
     // prototype 3
-    // label as gen 2 mark 3 [if necessary]
+    // TODO: add 2 x 45deg chamfered rubber band rails [compensate the shoe insert height by rubber band margin (it'll be likely sticking out) OR just make the rails deep enough, so it doesn't]
+    // label as gen 2 mark 3
  
-    // official pads are ~7mm bigger than the inbuild pads
-    tentacle_sync_e_velcro_mount(table_height=2, table_margin=0, velcro_pad_margin=8, velcro_dip=0.5, minkowski_cylinder_r=7);
+    tentacle_sync_e_velcro_mount(table_height=3, table_margin=3, velcro_pad_width_margin=8, velcro_pad_length_margin=9, velcro_dip=1, minkowski_cylinder_r=7);
 }
