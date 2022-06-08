@@ -14,25 +14,27 @@ module cold_shoe_insert() {
 }
 
 
-module chamfered_cube(dim, center=true) {
-    // pozor! only works with cubes :C
-    x = dim[0];
-    y = dim[1];
-    z = dim[2];
-    ble = sqrt(pow(y, 2) + pow(z, 2));
+module chamfered_cube(dim, center=false) {
+    x = dim[0]; y = dim[1]; z = dim[2];
+    hyp = sqrt(pow(y, 2) + pow(z, 2));
     
-    difference() {
-    cube(dim, center=center);
-    
-    color([1,0,0])
-    translate([0,x/4,x/4])
-    // TODO: compute this angle and hope that translation math works xD
-    rotate([45,0,0])
-    translate([0,0,0])
-    
-    cube([x + 1,y * z / ble, ble], center=true);
+    // TODO: if you'd like to center you need to center by this translate
+    translate([0,0,0]) {
+        difference() {
+        color([0,0,1])
+        cube(dim, center=false);
+        
+        color([1,0,0])
+        translate([-0.5,0,0]) // to make sure the edges overlap
+        translate([0,y,0])
+        rotate([atan(y/z),0,0])
+        
+        // the +1 is to make sure the edges overlap
+        cube([x + 1,y * z / hyp, hyp], center=false);
+        }
     }
 }
+
 
 module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_length_margin, velcro_dip, minkowski_cylinder_r, velcro_pad_width_margin) {
     // TOOD: can I guard against it?
@@ -52,6 +54,12 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
     // TODO: this cannot be really parametrized yet
     locking_connector_dip_margin = 2;
     
+    translate([0,0, table_height]) {
+        // TODO: dip width instead of 10
+        // y=z for the angle to be 45
+        chamfered_cube([ 10, velcro_dip, velcro_dip], center=true);
+    }
+    
     translate([0,0, table_height / 2]) {
         difference() {
             $fn=50;
@@ -62,6 +70,7 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
                     // TODO: figure out why there has to be this shitty -1 and the y axis
                     color([0,1,0])
                     translate([0,(tentacle_width + table_margin - 2 * minkowski_cylinder_r) / 2 + (locking_connector_dip + locking_connector_dip_margin) / 2 - 1 ,0])
+                    
                     cube([tentacle_width + table_margin - 2 * minkowski_cylinder_r, locking_connector_dip + locking_connector_dip_margin, table_height / 2], center=true);
                 }
                 
@@ -72,11 +81,31 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
             color([1,0,0])
             translate([0,0,table_height / 2])
             // the 2x compsensates for centering and it's easier to wrok with that way
+            // TODO: name those parameters and use them in the chamfer
             cube([inbuilt_velcro_pad_width + velcro_pad_length_margin, inbuilt_velcro_pad_length + velcro_pad_width_margin, 2 * velcro_dip], center = true);
         }
     }
 }
 
+module chamfered_cube(dim, center=false) {
+    x = dim[0]; y = dim[1]; z = dim[2];
+    hyp = sqrt(pow(y, 2) + pow(z, 2));
+    
+    // TODO: if you'd like to center you need to center by this translate
+    translate([0,0,0]) {
+    difference() {
+    cube(dim, center=false);
+    
+    color([1,0,0])
+    translate([-0.5,0,0]) // to make sure the edges overlap
+    translate([0,y,0])
+    rotate([atan(y/z),0,0])
+    
+    // the +1 is to make sure the edges overlap
+    cube([x + 1,y * z / hyp, hyp], center=false);
+    }
+    }
+}
 
 
 cold_shoe_insert();
