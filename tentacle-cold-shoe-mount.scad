@@ -1,4 +1,7 @@
 module cold_shoe_insert() {
+    
+    
+    
     color([0,0.5,1])
     // per ISO 518:2006(E), page 3 - inner insert
     cube([18.6, 18, 2], center=true);
@@ -10,6 +13,26 @@ module cold_shoe_insert() {
     }
 }
 
+
+module chamfered_cube(dim, center=true) {
+    // pozor! only works with cubes :C
+    x = dim[0];
+    y = dim[1];
+    z = dim[2];
+    ble = sqrt(pow(y, 2) + pow(z, 2));
+    
+    difference() {
+    cube(dim, center=center);
+    
+    color([1,0,0])
+    translate([0,x/4,x/4])
+    // TODO: compute this angle and hope that translation math works xD
+    rotate([45,0,0])
+    translate([0,0,0])
+    
+    cube([x + 1,y * z / ble, ble], center=true);
+    }
+}
 
 module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_length_margin, velcro_dip, minkowski_cylinder_r, velcro_pad_width_margin) {
     // TOOD: can I guard against it?
@@ -67,6 +90,7 @@ translate([0,0,cold_shoe_over_0_height]) {
     // PARAMETER_EXPERIMENT 3mm table margin, 5 is cool but let's see
     // PARAMETER_EXPERIMENT 2mm table height, 2 is cool but let's see
     // PARAMETER_EXPERIMENT 1mm velcro dip, 0.5 is cool but let's see
+    // note the reduction in printing time
     // label as gen 2 mark 2
 
     // prototype 3
@@ -74,5 +98,5 @@ translate([0,0,cold_shoe_over_0_height]) {
     // TODO: this needs 3.5mm table height to even make sense - rubber is 1.5mm
     // label as gen 2 mark 3
  
-    tentacle_sync_e_velcro_mount(table_height=3, table_margin=2, velcro_pad_width_margin=8, velcro_pad_length_margin=9, velcro_dip=1, minkowski_cylinder_r=7);
+    tentacle_sync_e_velcro_mount(table_height=3, table_margin=2, velcro_pad_width_margin=6, velcro_pad_length_margin=9, velcro_dip=1, minkowski_cylinder_r=7);
 }
