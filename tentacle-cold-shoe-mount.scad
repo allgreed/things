@@ -1,7 +1,4 @@
 module cold_shoe_insert() {
-    
-    
-    
     color([0,0.5,1])
     // per ISO 518:2006(E), page 3 - inner insert
     cube([18.6, 18, 2], center=true);
@@ -14,17 +11,17 @@ module cold_shoe_insert() {
 }
 
 
-module chamfered_cube(dim, center=false) {
+module chamfered_cube(dim, center_x=false) {
     x = dim[0]; y = dim[1]; z = dim[2];
     hyp = sqrt(pow(y, 2) + pow(z, 2));
-    
-    // TODO: if you'd like to center you need to center by this translate
-    translate([0,0,0]) {
+    centering_vector = (center_x) ? [-x/2,0,0] : [0,0,0];
+
+    translate(centering_vector) {
         difference() {
         color([0,0,1])
         cube(dim, center=false);
         
-        color([1,0,0])
+        color([0,1,0])
         translate([-0.5,0,0]) // to make sure the edges overlap
         translate([0,y,0])
         rotate([atan(y/z),0,0])
@@ -36,7 +33,7 @@ module chamfered_cube(dim, center=false) {
 }
 
 
-module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_length_margin, velcro_dip, minkowski_cylinder_r, velcro_pad_width_margin) {
+module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_length_margin, velcro_dip, minkowski_cylinder_r, velcro_pad_width_margin, velcrop_pad_dip_offset=[0,0,0]) {
     // TOOD: can I guard against it?
     // minkowski_cylinder_r is up to 21 for whatever reason, then it degrades into a full circle
 
@@ -54,12 +51,11 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
     // TODO: this cannot be really parametrized yet
     locking_connector_dip_margin = 2;
     
-    translate([0,0, table_height]) {
-        // TODO: dip width instead of 10
-        // y=z for the angle to be 45
-        chamfered_cube([ 10, velcro_dip, velcro_dip], center=true);
-    }
-    
+    // derived
+    // *******
+    velcro_pad_dip_width = inbuilt_velcro_pad_width + velcro_pad_width_margin;
+    velcro_pad_dip_length = inbuilt_velcro_pad_length + velcro_pad_length_margin;
+
     translate([0,0, table_height / 2]) {
         difference() {
             $fn=50;
@@ -78,32 +74,43 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
                 cylinder(r=minkowski_cylinder_r,h=table_height / 2, center = true);
             }
             
-            color([1,0,0])
-            translate([0,0,table_height / 2])
-            // the 2x compsensates for centering and it's easier to wrok with that way
-            // TODO: name those parameters and use them in the chamfer
-            cube([inbuilt_velcro_pad_width + velcro_pad_length_margin, inbuilt_velcro_pad_length + velcro_pad_width_margin, 2 * velcro_dip], center = true);
-        }
-    }
-}
+            translate(velcrop_pad_dip_offset) {
+                color([1,0,0])
+                translate([0,0,table_height / 2])
+                // the 2x compsensates for centering and it's easier to wrok with that way
+                // TODO: name those parameters and use them in the chamfer
+                cube([velcro_pad_dip_width, velcro_pad_dip_length, 2 * velcro_dip], center = true);
 
-module chamfered_cube(dim, center=false) {
-    x = dim[0]; y = dim[1]; z = dim[2];
-    hyp = sqrt(pow(y, 2) + pow(z, 2));
-    
-    // TODO: if you'd like to center you need to center by this translate
-    translate([0,0,0]) {
-    difference() {
-    cube(dim, center=false);
-    
-    color([1,0,0])
-    translate([-0.5,0,0]) // to make sure the edges overlap
-    translate([0,y,0])
-    rotate([atan(y/z),0,0])
-    
-    // the +1 is to make sure the edges overlap
-    cube([x + 1,y * z / hyp, hyp], center=false);
-    }
+                translate([0,0,table_height / 2 + 0]) {
+                    // y=z for the angle to be 45
+                    // TODO: why +1? o.0
+                    translate([0,-velcro_pad_dip_length / 2, 0])
+                    rotate([180,0,0])
+                    chamfered_cube([velcro_pad_dip_width, velcro_dip, velcro_dip], center_x=true);
+                }
+
+                translate([0,0,table_height / 2 + 0]) {
+                    // y=z for the angle to be 45
+                    translate([0,+velcro_pad_dip_length / 2, 0])
+                    rotate([270,0,0])
+                    chamfered_cube([velcro_pad_dip_width, velcro_dip, velcro_dip], center_x=true);
+                }
+
+                translate([0,0,table_height / 2 + 0]) {
+                    // y=z for the angle to be 45
+                    translate([-velcro_pad_dip_width / 2 , 0, 0])
+                    rotate([270,0,90])
+                    chamfered_cube([velcro_pad_dip_length + 2 * velcro_dip, velcro_dip, velcro_dip], center_x=true);
+                }
+
+                translate([0,0,table_height / 2 + 0]) {
+                    // y=z for the angle to be 45
+                    translate([velcro_pad_dip_width / 2 , 0, 0])
+                    rotate([180,0,90])
+                    chamfered_cube([velcro_pad_dip_length + 2 * velcro_dip, velcro_dip, velcro_dip], center_x=true);
+                }
+            }
+        }
     }
 }
 
@@ -111,15 +118,16 @@ module chamfered_cube(dim, center=false) {
 cold_shoe_insert();
 cold_shoe_over_0_height = (2 / 2) + 1.5;
 
+translate([0,18 / 2, cold_shoe_over_0_height])
+rotate([270,0,0])
+chamfered_cube([12.5,2 + 1.5,2 + 1.5], center_x=true);
+
 translate([0,0,cold_shoe_over_0_height]) {
     // prototype 2
-    // TODO: 45deg chamfer on the velcro dip (outside of dip!)
-    // TODO: add chamfered support on the "shorter" (then one it's being printed on) side for part of the cold shoe insert
-    
     // PARAMETER_EXPERIMENT 3mm table margin, 5 is cool but let's see
     // PARAMETER_EXPERIMENT 2mm table height, 2 is cool but let's see
     // PARAMETER_EXPERIMENT 1mm velcro dip, 0.5 is cool but let's see
-    // note the reduction in printing time
+    // note the reduction in printing time - gen2mk1 was 1:45h
     // label as gen 2 mark 2
 
     // prototype 3
@@ -127,5 +135,5 @@ translate([0,0,cold_shoe_over_0_height]) {
     // TODO: this needs 3.5mm table height to even make sense - rubber is 1.5mm
     // label as gen 2 mark 3
  
-    tentacle_sync_e_velcro_mount(table_height=3, table_margin=2, velcro_pad_width_margin=6, velcro_pad_length_margin=9, velcro_dip=1, minkowski_cylinder_r=7);
+    tentacle_sync_e_velcro_mount(table_height=3, table_margin=2, velcro_pad_width_margin=9, velcro_pad_length_margin=6, velcro_dip=1, minkowski_cylinder_r=7, velcrop_pad_dip_offset=[0,sqrt(2),0]);
 }
