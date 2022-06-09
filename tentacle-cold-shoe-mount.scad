@@ -127,12 +127,15 @@ translate([0,0,cold_shoe_over_0_height]) {
     // PARAMETER_EXPERIMENT 3mm table margin, 5 is cool but let's see
     // PARAMETER_EXPERIMENT 2mm table height, 2 is cool but let's see
     // PARAMETER_EXPERIMENT 1mm velcro dip, 0.5 is cool but let's see
-    // note the reduction in printing time - gen2mk1 was 1:45h
+    // note the reduction in printing time - gen2mk1 was 1:45h, this will be 1:08
     // label as gen 2 mark 2
 
     // prototype 3
+    // TODO: add fancier chamfered corners
+
     // TODO: add 2 x 45deg chamfered rubber band rails [compensate the shoe insert height by rubber band margin, yes, compensate]
     // TODO: this needs 3.5mm table height to even make sense - rubber is 1.5mm
+
     // label as gen 2 mark 3
  
     tentacle_sync_e_velcro_mount(table_height=3, table_margin=2, velcro_pad_width_margin=9, velcro_pad_length_margin=6, velcro_dip=1, minkowski_cylinder_r=7, velcrop_pad_dip_offset=[0,sqrt(2),0]);
