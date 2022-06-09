@@ -86,7 +86,7 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
                     // TODO: why +1? o.0
                     translate([0,-velcro_pad_dip_length / 2, 0])
                     rotate([180,0,0])
-                    chamfered_cube([velcro_pad_dip_width, velcro_dip, velcro_dip], center_x=true);
+                    chamfered_cube([velcro_pad_dip_width + 2 * velcro_dip, velcro_dip, velcro_dip], center_x=true);
                 }
 
                 translate([0,0,table_height / 2 + 0]) {
@@ -98,14 +98,14 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
 
                 translate([0,0,table_height / 2 + 0]) {
                     // y=z for the angle to be 45
-                    translate([-velcro_pad_dip_width / 2 , 0, 0])
+                    translate([-velcro_pad_dip_width / 2 , velcro_dip, 0])
                     rotate([270,0,90])
                     chamfered_cube([velcro_pad_dip_length + 2 * velcro_dip, velcro_dip, velcro_dip], center_x=true);
                 }
 
                 translate([0,0,table_height / 2 + 0]) {
                     // y=z for the angle to be 45
-                    translate([velcro_pad_dip_width / 2 , 0, 0])
+                    translate([velcro_pad_dip_width / 2 , velcro_dip, 0])
                     rotate([180,0,90])
                     chamfered_cube([velcro_pad_dip_length + 2 * velcro_dip, velcro_dip, velcro_dip], center_x=true);
                 }
