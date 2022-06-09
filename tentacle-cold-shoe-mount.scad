@@ -120,7 +120,7 @@ cold_shoe_over_0_height = (2 / 2) + 1.5;
 
 translate([0,18 / 2, cold_shoe_over_0_height])
 rotate([270,0,0])
-chamfered_cube([12.5,2 + 1.5,2 + 1.5], center_x=true);
+chamfered_cube([18.6,2 + 1.5,2 + 1.5], center_x=true);
 
 translate([0,0,cold_shoe_over_0_height]) {
     // prototype 2
