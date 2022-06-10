@@ -57,6 +57,14 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
     velcro_pad_dip_length = inbuilt_velcro_pad_length + velcro_pad_length_margin;
 
     translate([0,0, table_height / 2]) {
+        // TODO: position the pyramid and extend the base * 2
+        a = 1;
+        color([0,1,0])
+        translate([velcro_pad_dip_width / 2, -velcro_pad_dip_length / 2 + a, -a])
+        rotate([0,0,45])
+        cylinder(d1=0, d2=sqrt(pow(a * 1,2)*2), h=a, $fn=4); 
+        }
+
         difference() {
             $fn=50;
             minkowski() {
@@ -86,7 +94,7 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
                     // TODO: why +1? o.0
                     translate([0,-velcro_pad_dip_length / 2, 0])
                     rotate([180,0,0])
-                    chamfered_cube([velcro_pad_dip_width + 2 * velcro_dip, velcro_dip, velcro_dip], center_x=true);
+                    chamfered_cube([velcro_pad_dip_width, velcro_dip, velcro_dip], center_x=true);
                 }
 
                 translate([0,0,table_height / 2 + 0]) {
@@ -109,8 +117,9 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
                     rotate([180,0,90])
                     chamfered_cube([velcro_pad_dip_length + 2 * velcro_dip, velcro_dip, velcro_dip], center_x=true);
                 }
+
             }
-        }
+
     }
 }
 
@@ -132,10 +141,6 @@ translate([0,0,cold_shoe_over_0_height]) {
 
     // prototype 3
     // TODO: add fancier chamfered corners
-
-    // TODO: add 2 x 45deg chamfered rubber band rails [compensate the shoe insert height by rubber band margin, yes, compensate]
-    // TODO: this needs 3.5mm table height to even make sense - rubber is 1.5mm
-
     // label as gen 2 mark 3
  
     tentacle_sync_e_velcro_mount(table_height=3, table_margin=2, velcro_pad_width_margin=9, velcro_pad_length_margin=6, velcro_dip=1, minkowski_cylinder_r=7, velcrop_pad_dip_offset=[0,sqrt(2),0]);
