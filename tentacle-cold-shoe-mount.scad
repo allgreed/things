@@ -63,7 +63,6 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
         translate([velcro_pad_dip_width / 2, -velcro_pad_dip_length / 2 + a, -a])
         rotate([0,0,45])
         cylinder(d1=0, d2=sqrt(pow(a * 1,2)*2), h=a, $fn=4); 
-        }
 
         difference() {
             $fn=50;
@@ -91,10 +90,11 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
 
                 translate([0,0,table_height / 2 + 0]) {
                     // y=z for the angle to be 45
+                    // 1.81y=z for the angle to be 45/2 since tan(45/2) ~ 0.55
                     // TODO: why +1? o.0
                     translate([0,-velcro_pad_dip_length / 2, 0])
                     rotate([180,0,0])
-                    chamfered_cube([velcro_pad_dip_width, velcro_dip, velcro_dip], center_x=true);
+                    chamfered_cube([velcro_pad_dip_width, velcro_dip / 0.55, velcro_dip], center_x=true);
                 }
 
                 translate([0,0,table_height / 2 + 0]) {
@@ -119,7 +119,7 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
                 }
 
             }
-
+        }
     }
 }
 
@@ -132,16 +132,11 @@ rotate([270,0,0])
 chamfered_cube([18.6,2 + 1.5,2 + 1.5], center_x=true);
 
 translate([0,0,cold_shoe_over_0_height]) {
-    // prototype 2
-    // PARAMETER_EXPERIMENT 3mm table margin, 5 is cool but let's see
-    // PARAMETER_EXPERIMENT 2mm table height, 2 is cool but let's see
-    // PARAMETER_EXPERIMENT 1mm velcro dip, 0.5 is cool but let's see
-    // note the reduction in printing time - gen2mk1 was 1:45h, this will be 1:08
-    // label as gen 2 mark 2
-
     // prototype 3
     // TODO: add fancier chamfered corners
-    // label as gen 2 mark 3
+
+    // PARAMETER_EXPERIMENT 2mm table height, 3 is cool but let's see
+    // label as mark 3
  
-    tentacle_sync_e_velcro_mount(table_height=3, table_margin=2, velcro_pad_width_margin=9, velcro_pad_length_margin=6, velcro_dip=1, minkowski_cylinder_r=7, velcrop_pad_dip_offset=[0,sqrt(2),0]);
+    tentacle_sync_e_velcro_mount(table_height=2, table_margin=2, velcro_pad_width_margin=9, velcro_pad_length_margin=6, velcro_dip=1, minkowski_cylinder_r=7, velcrop_pad_dip_offset=[0,sqrt(2),0]);
 }
