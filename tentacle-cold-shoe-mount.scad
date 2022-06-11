@@ -33,6 +33,56 @@ module chamfered_cube(dim, center_x=false) {
 }
 
 
+module pyramid_chamfered_corner(dim, inverse=false, points=false) {
+    x = dim[0]; y = dim[1]; z = dim[2];
+    
+    p = [
+        [0,0,0]
+      , [x,0,0]
+      , [0,y,0]
+      , [x,y,0]
+      , [0,0,z]
+      , [0,y,z]
+      , [x,y,z]
+    ];
+
+    f = [
+         [0,3,2]
+        ,[0,1,3]
+        ,[0,4,1]
+        ,[1,6,3]
+        ,[1,4,6]
+        ,[4,5,6]
+        ,[2,6,5]
+        ,[2,3,6]
+        ,[2,5,4]
+        ,[0,2,4]
+    ];
+ 
+    if (inverse) {
+        difference() {
+            cube(dim);
+            polyhedron(points=p, faces=f);
+        }
+    }
+    else {
+        polyhedron(points=p, faces=f);
+    }
+
+    module showPoints(v) {
+        for (i = [0: len(v)-1]) {
+            translate(v[i]) color("red") 
+            text(str(i), font = "Courier New", size=1.5);
+             
+        }
+    }
+    if (points)
+    {
+        showPoints(p);
+    }
+}
+
+
 module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_length_margin, velcro_dip, minkowski_cylinder_r, velcro_pad_width_margin, velcrop_pad_dip_offset=[0,0,0]) {
     // TOOD: can I guard against it?
     // minkowski_cylinder_r is up to 21 for whatever reason, then it degrades into a full circle
@@ -116,9 +166,17 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
                     chamfered_cube([velcro_pad_dip_length, velcro_dip, velcro_dip], center_x=true);
                 }
 
-                // a clue about how to position the corner extractor
-                /*translate([velcro_pad_dip_width / 2, -velcro_pad_dip_length / 2 - 1.81,0])*/
-                /*cube([1,1 * 1.81,1]);*/
+                // left-top corner
+                translate([velcro_pad_dip_width / 2, -velcro_pad_dip_length / 2 - 1.81,0])
+                rotate([0,0,180])
+                translate([-velcro_dip,-velcro_dip / 0.55,0])
+                pyramid_chamfered_corner([velcro_dip, velcro_dip / 0.55, velcro_dip], inverse=true);
+
+                // right-top corner
+                translate([-velcro_pad_dip_width / 2, -velcro_pad_dip_length / 2 - 1.81,0])
+                rotate([-90,-90,-90])
+                translate([0,-velcro_dip / 0.55,-velcro_dip])
+                pyramid_chamfered_corner([velcro_dip, velcro_dip / 0.55, velcro_dip], inverse=true);
             } // velcro dip translation end
         }
     }
@@ -136,10 +194,16 @@ translate([0,0,cold_shoe_over_0_height]) {
     // prototype 3
     // TODO: add fancier chamfered corners
     // PARAMETER_EXPERIMENT 2mm table height, 3 is cool but let's see
+    // document manufacturing - printing orientation, the need for supports
     // label as mark 3
 
     // prototype 4
+    // MANUFACTURING EXPERIMENT - try reducing infill and increasing print speed
     // label as mark 4
+
+    // prototype 5
+    // MANUFACTURING EXPERIMENT - print with supports off 
+    // label as mark 5
  
     tentacle_sync_e_velcro_mount(table_height=2, table_margin=2, velcro_pad_width_margin=9, velcro_pad_length_margin=6 + 2.5, velcro_dip=1, minkowski_cylinder_r=7, velcrop_pad_dip_offset=[0,sqrt(2) + 2.5,0]);
 }
