@@ -192,18 +192,20 @@ chamfered_cube([18.6,2 + 1.5,2 + 1.5], center_x=true);
 
 translate([0,0,cold_shoe_over_0_height]) {
     // prototype 3
-    // TODO: add fancier chamfered corners
     // PARAMETER_EXPERIMENT 2mm table height, 3 is cool but let's see
-    // document manufacturing - printing orientation, the need for supports
     // label as mark 3
 
     // prototype 4
-    // MANUFACTURING EXPERIMENT - try reducing infill and increasing print speed
+    // MANUFACTURING EXPERIMENT - try reducing infill
     // label as mark 4
 
     // prototype 5
-    // MANUFACTURING EXPERIMENT - print with supports off 
+    // MANUFACTURING EXPERIMENT - try increasing printing speed
     // label as mark 5
+
+    // prototype 6
+    // MANUFACTURING EXPERIMENT - print with supports off 
+    // label as mark 6
  
     tentacle_sync_e_velcro_mount(table_height=2, table_margin=2, velcro_pad_width_margin=9, velcro_pad_length_margin=6 + 2.5, velcro_dip=1, minkowski_cylinder_r=7, velcrop_pad_dip_offset=[0,sqrt(2) + 2.5,0]);
 }
