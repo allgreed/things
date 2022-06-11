@@ -50,6 +50,7 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
     
     // TODO: this cannot be really parametrized yet
     locking_connector_dip_margin = 2;
+    experimental_additonal_dip_maring_width = 2.5;
     
     // derived
     // *******
@@ -57,24 +58,18 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
     velcro_pad_dip_length = inbuilt_velcro_pad_length + velcro_pad_length_margin;
 
     translate([0,0, table_height / 2]) {
-        // TODO: position the pyramid and extend the base * 2
-        a = 1;
-        color([0,1,0])
-        translate([velcro_pad_dip_width / 2, -velcro_pad_dip_length / 2 + a, -a])
-        rotate([0,0,45])
-        cylinder(d1=0, d2=sqrt(pow(a * 1,2)*2), h=a, $fn=4); 
-
         difference() {
             $fn=50;
             minkowski() {
                 difference() {
-                    cube([tentacle_width + table_margin - 2 * minkowski_cylinder_r, tentacle_length + table_margin - 2 * minkowski_cylinder_r, table_height / 2], center = true);
+                    coef = table_margin - 2 * minkowski_cylinder_r;
+                    cube([tentacle_width + coef, tentacle_length + coef, table_height / 2], center = true);
                     
                     // TODO: figure out why there has to be this shitty -1 and the y axis
                     color([0,1,0])
-                    translate([0,(tentacle_width + table_margin - 2 * minkowski_cylinder_r) / 2 + (locking_connector_dip + locking_connector_dip_margin) / 2 - 1 ,0])
+                    translate([0,(tentacle_width + coef) / 2 + (locking_connector_dip + locking_connector_dip_margin) / 2 - 1 + experimental_additonal_dip_maring_width,0])
                     
-                    cube([tentacle_width + table_margin - 2 * minkowski_cylinder_r, locking_connector_dip + locking_connector_dip_margin, table_height / 2], center=true);
+                    cube([tentacle_width + coef, locking_connector_dip + locking_connector_dip_margin, table_height / 2], center=true);
                 }
                 
                 color([0,1,0])
@@ -97,28 +92,34 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
                     chamfered_cube([velcro_pad_dip_width, velcro_dip / 0.55, velcro_dip], center_x=true);
                 }
 
+                // bottom
                 translate([0,0,table_height / 2 + 0]) {
                     // y=z for the angle to be 45
                     translate([0,+velcro_pad_dip_length / 2, 0])
                     rotate([270,0,0])
-                    chamfered_cube([velcro_pad_dip_width, velcro_dip, velcro_dip], center_x=true);
+                    chamfered_cube([velcro_pad_dip_width, velcro_dip, velcro_dip / 0.55], center_x=true);
                 }
 
+                // right
                 translate([0,0,table_height / 2 + 0]) {
                     // y=z for the angle to be 45
-                    translate([-velcro_pad_dip_width / 2 , velcro_dip, 0])
+                    translate([-velcro_pad_dip_width / 2 , 0, 0])
                     rotate([270,0,90])
-                    chamfered_cube([velcro_pad_dip_length + 2 * velcro_dip, velcro_dip, velcro_dip], center_x=true);
+                    chamfered_cube([velcro_pad_dip_length, velcro_dip, velcro_dip], center_x=true);
                 }
 
+                // left
                 translate([0,0,table_height / 2 + 0]) {
                     // y=z for the angle to be 45
-                    translate([velcro_pad_dip_width / 2 , velcro_dip, 0])
+                    translate([velcro_pad_dip_width / 2 , 0, 0])
                     rotate([180,0,90])
-                    chamfered_cube([velcro_pad_dip_length + 2 * velcro_dip, velcro_dip, velcro_dip], center_x=true);
+                    chamfered_cube([velcro_pad_dip_length, velcro_dip, velcro_dip], center_x=true);
                 }
 
-            }
+                // a clue about how to position the corner extractor
+                /*translate([velcro_pad_dip_width / 2, -velcro_pad_dip_length / 2 - 1.81,0])*/
+                /*cube([1,1 * 1.81,1]);*/
+            } // velcro dip translation end
         }
     }
 }
@@ -134,9 +135,11 @@ chamfered_cube([18.6,2 + 1.5,2 + 1.5], center_x=true);
 translate([0,0,cold_shoe_over_0_height]) {
     // prototype 3
     // TODO: add fancier chamfered corners
-
     // PARAMETER_EXPERIMENT 2mm table height, 3 is cool but let's see
     // label as mark 3
+
+    // prototype 4
+    // label as mark 4
  
-    tentacle_sync_e_velcro_mount(table_height=2, table_margin=2, velcro_pad_width_margin=9, velcro_pad_length_margin=6, velcro_dip=1, minkowski_cylinder_r=7, velcrop_pad_dip_offset=[0,sqrt(2),0]);
+    tentacle_sync_e_velcro_mount(table_height=2, table_margin=2, velcro_pad_width_margin=9, velcro_pad_length_margin=6 + 2.5, velcro_dip=1, minkowski_cylinder_r=7, velcrop_pad_dip_offset=[0,sqrt(2) + 2.5,0]);
 }
