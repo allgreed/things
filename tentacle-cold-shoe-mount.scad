@@ -191,22 +191,22 @@ rotate([270,0,0])
 chamfered_cube([18.6,2 + 1.5,2 + 1.5], center_x=true);
 
 translate([0,0,cold_shoe_over_0_height]) {
-    // prototype 4
-    // MANUFACTURING EXPERIMENT - changing profile to "normal - 0.15mm" 
-    // label as mark 4
-
     // prototype 5
-    // MANUFACTURING EXPERIMENT - set printing to 0.1 fine profile - as control group
-    // TODO: rotate the model for exporting, so slicing is more straigh-forward
-
-    // speeds up the printing to 32 minutes, so yet another ~50%
-    // tweaking settings like printing speed, infill, doesn't affect printing speed
-    // label as mark 5
+    // MANU - try adhesion
+    // TODO - anything else?
+    // label as makr 5
 
     // prototype 6
+    // MANUFACTURING EXPERIMENT - set printing to 0.15 normal profile - as control group
+    // speeds up the printing to 32 minutes, so yet another ~50%
+    // tweaking settings like printing speed, infill, doesn't affect printing speed
+    // label as mark 6
+    // TODO: rotate the model for exporting, so slicing is more straigh-forward
+    
+    // prototype 7
     // MANUFACTURING EXPERIMENT - print with supports off 
     // TODO: if fails - redesign the bottom so that supports and sanding is not needed
-    // label as mark 6
+    // label as mark 7
  
     tentacle_sync_e_velcro_mount(table_height=3, table_margin=2, velcro_pad_width_margin=9, velcro_pad_length_margin=6 + 2.5, velcro_dip=1, minkowski_cylinder_r=7, velcrop_pad_dip_offset=[0,sqrt(2) + 2.5,0]);
 }
