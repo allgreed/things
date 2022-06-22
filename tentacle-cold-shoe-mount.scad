@@ -193,21 +193,6 @@ rotate([-90,0,0]) // to eliminate manual error when slicing
     chamfered_cube([18.6,2 + 1.5,2 + 1.5], center_x=true);
 
     translate([0,0,cold_shoe_over_0_height]) {
-        // prototype 5
-        // MANU - "fine" without adhesion
-        // label as mark 5
-
-        // prototype 6
-        // MANUFACTURING EXPERIMENT - "normal" with adhesion
-        // speeds up the printing to 32 minutes, so yet another ~50%
-        // tweaking settings like printing speed, infill, doesn't affect printing speed
-        // label as mark 6
-        
-        // prototype 7
-        // MANUFACTURING EXPERIMENT - print with supports off 
-        // TODO: if fails - redesign the bottom so that supports and sanding is not needed
-        // label as mark 7
-     
         tentacle_sync_e_velcro_mount(table_height=3, table_margin=2, velcro_pad_width_margin=9, velcro_pad_length_margin=6 + 2.5, velcro_dip=1, minkowski_cylinder_r=7, velcrop_pad_dip_offset=[0,sqrt(2) + 2.5,0]);
     }
 }
