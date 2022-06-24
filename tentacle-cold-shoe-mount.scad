@@ -1,12 +1,12 @@
-module cold_shoe_insert() {
+module cold_shoe_insert(height_padding=0) {
     color([0,0.5,1])
     // per ISO 518:2006(E), page 3 - inner insert
     cube([18.6, 18, 2], center=true);
 
-    translate([0,0,(2 + 1.5) / 2]) {
+    translate([0,0,(2 + 1.5 + height_padding) / 2]) {
       color([0,0,1])
       // per ISO 518:2006(E), page 3 - between "teeth"
-      cube([12.5, 18, 1.5], center=true);
+      cube([12.5, 18, 1.5 + height_padding], center=true);
     }
 }
 
@@ -185,12 +185,13 @@ module tentacle_sync_e_velcro_mount(table_height, table_margin, velcro_pad_lengt
 
 rotate([-90,0,0]) // to eliminate manual error when slicing
 {
-    cold_shoe_insert();
-    cold_shoe_over_0_height = (2 / 2) + 1.5;
+    hp = 0.5;
+    cold_shoe_insert(height_padding = hp);
+    cold_shoe_over_0_height = (2 / 2) + 1.5 + hp;
 
     translate([0,18 / 2, cold_shoe_over_0_height])
     rotate([270,0,0])
-    chamfered_cube([18.6,2 + 1.5,2 + 1.5], center_x=true);
+    chamfered_cube([18.6,2 + 1.5 + hp,2 + 1.5 + hp], center_x=true);
 
     translate([0,0,cold_shoe_over_0_height]) {
         tentacle_sync_e_velcro_mount(table_height=3, table_margin=2, velcro_pad_width_margin=9, velcro_pad_length_margin=6 + 2.5, velcro_dip=1, minkowski_cylinder_r=7, velcrop_pad_dip_offset=[0,sqrt(2) + 2.5,0]);
